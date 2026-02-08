@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fitra — Describe it. We'll program it.</title>
+<meta name="description" content="fitra is AI-powered workout planning that speaks your language. Describe your ideal session and get a structured program in seconds.">
+<meta property="og:title" content="fitra — Describe it. We'll program it.">
+<meta property="og:description" content="AI workout planning that speaks your language. Describe your ideal session and get a structured program in seconds.">
+<meta property="og:image" content="https://www.getfitra.com/og-image.png">
+<meta property="og:url" content="https://www.getfitra.com/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="fitra — Describe it. We'll program it.">
+<meta name="twitter:description" content="AI workout planning that speaks your language. Describe your ideal session and get a structured program in seconds.">
+<meta name="twitter:image" content="https://www.getfitra.com/og-image.png">
+<link rel="canonical" href="https://www.getfitra.com/">
+<link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "fitra",
+  "applicationCategory": "HealthApplication",
+  "description": "AI workout planning that speaks your language.",
+  "operatingSystem": "iOS, Android",
+  "offers": { "@type": "Offer", "price": "0" }
+}
+</script>
+<style>
+  :root {
+    --cream: #FDF5EC;
+    --cream-dark: #F7EBDB;
+    --peach: #FCDCC4;
+    --orange: #E8673C;
+    --orange-dark: #D4562E;
+    --charcoal: #1A1A18;
+    --warm-gray: #8A8070;
+    --warm-gray-light: #B5A998;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--charcoal);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── GRAIN OVERLAY ─── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.4s, backdrop-filter 0.4s;
+  }
+
+  nav.scrolled {
+    background: rgba(253, 245, 236, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .nav-logo img {
+    height: 28px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--warm-gray);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--charcoal); }
+
+  .nav-links a.nav-cta {
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--orange);
+    border: 1.5px solid var(--orange);
+    padding: 0.5rem 1.4rem;
+    border-radius: 100px;
+    transition: all 0.3s;
+  }
+
+  .nav-links a.nav-cta:hover {
+    background: var(--orange);
+    color: #fff;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Warm gradient wash behind hero */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140%;
+    height: 60%;
+    background: radial-gradient(ellipse at center, var(--peach) 0%, transparent 70%);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+  }
+
+  .hero-logo {
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.2s forwards;
+  }
+
+  .hero-logo img {
+    height: 70px;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.15em;
+    opacity: 0;
+    animation: fadeUp 1s 0.4s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  .hero-sub {
+    font-family: var(--sans);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--warm-gray);
+    font-weight: 300;
+    margin-top: 1.5rem;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+    background: var(--orange);
+    padding: 1rem 2.8rem;
+    border-radius: 100px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+    animation: fadeUp 1s 0.8s forwards;
+    box-shadow: 0 4px 24px rgba(232, 103, 60, 0.25);
+  }
+
+  .hero-cta:hover {
+    background: var(--orange-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(232, 103, 60, 0.35);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+
+  .scroll-hint span {
+    display: block;
+    width: 1px;
+    height: 48px;
+    background: var(--warm-gray-light);
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-hint span::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--orange);
+    animation: scrollLine 2s infinite;
+  }
+
+  @keyframes scrollLine {
+    0% { top: -100%; }
+    100% { top: 100%; }
+  }
+
+  /* ─── DEMO SECTION ─── */
+  .demo {
+    padding: 6rem 2rem 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .demo-label {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 3rem;
+  }
+
+  .prompt-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 550px;
+    width: 100%;
+  }
+
+  .prompt-bubble {
+    background: var(--cream-dark);
+    border: 1px solid rgba(26, 26, 24, 0.06);
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+    width: 100%;
+    text-align: center;
+    position: relative;
+  }
+
+  .prompt-text {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: var(--charcoal);
+    line-height: 1.5;
+  }
+
+  .flow-dots {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 0.5rem 0;
+  }
+
+  .flow-dots span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--orange);
+    opacity: 0.5;
+  }
+
+  .flow-dots span:last-child { opacity: 1; }
+
+  .result-card {
+    background: #fff;
+    border: 1px solid rgba(26, 26, 24, 0.06);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(26, 26, 24, 0.06);
+  }
+
+  .result-header {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 1.5rem;
+    color: var(--charcoal);
+  }
+
+  .exercise-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(26, 26, 24, 0.05);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+  }
+
+  .exercise-row:last-child { border-bottom: none; }
+
+  .exercise-name {
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+
+  .exercise-detail {
+    color: var(--warm-gray);
+    font-weight: 300;
+  }
+
+  .result-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(26, 26, 24, 0.08);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    color: var(--warm-gray);
+  }
+
+  /* ─── FEATURES SECTION ─── */
+  .features {
+    padding: 6rem 2rem 8rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .features-heading {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+
+  .features-heading h2 {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  .features-heading h2 em {
+    font-style: italic;
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .feature-card {
+    background: var(--cream-dark);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .feature-card:hover { transform: translateY(-4px); }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .feature-icon::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+
+  .feature-card h3 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-card p {
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    color: var(--warm-gray);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* ─── QUOTE / PHILOSOPHY ─── */
+  .philosophy {
+    padding: 8rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .philosophy::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--warm-gray-light), transparent);
+    opacity: 0.3;
+  }
+
+  .philosophy blockquote {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-style: normal;
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.1;
+    color: var(--charcoal);
+  }
+
+  .philosophy blockquote em {
+    color: var(--orange);
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  /* ─── CTA / BOTTOM ─── */
+  .bottom-cta {
+    padding: 8rem 2rem 6rem;
+    text-align: center;
+  }
+
+  .bottom-cta h2 {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .bottom-cta h2 em {
+    font-style: italic;
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  .bottom-cta p {
+    font-family: var(--sans);
+    color: var(--warm-gray);
+    font-weight: 300;
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .cta-btn-outline {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--orange);
+    border: 1.5px solid var(--orange);
+    padding: 1rem 2.8rem;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: all 0.35s;
+  }
+
+  .cta-btn-outline:hover {
+    background: var(--orange);
+    color: #fff;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(26, 26, 24, 0.06);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  footer img { height: 22px; }
+
+  footer small {
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    color: var(--warm-gray);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+    .hero-logo img { height: 50px; }
+    .feature-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+    .waitlist-form {
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 100%;
+      padding: 0 1rem;
+    }
+    .waitlist-form input[type="email"] {
+      width: 100%;
+      border-right: 1.5px solid rgba(26, 26, 24, 0.12);
+      border-radius: 100px;
+      text-align: center;
+    }
+    .waitlist-form button {
+      width: 100%;
+      border-radius: 100px;
+      padding: 1rem;
+    }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+
+  /* ─── TYPING EFFECT ─── */
+  .typing-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background: var(--orange);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  /* ─── SKIP LINK ─── */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 200;
+    background: var(--orange);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-radius: 0 0 8px 0;
+  }
+
+  .skip-link:focus {
+    left: 0;
+  }
+
+  /* ─── FOCUS VISIBLE ─── */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+  }
+
+  /* ─── HAMBURGER MENU ─── */
+  .nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 28px;
+    height: 20px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .nav-hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--charcoal);
+    position: absolute;
+    left: 0;
+    transition: transform 0.3s, top 0.3s;
+  }
+
+  .nav-hamburger span:first-child { top: 4px; }
+  .nav-hamburger span:last-child { top: 14px; }
+
+  .nav-hamburger.active span:first-child {
+    top: 9px;
+    transform: rotate(45deg);
+  }
+
+  .nav-hamburger.active span:last-child {
+    top: 9px;
+    transform: rotate(-45deg);
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+
+  .mobile-menu.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-menu a {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .mobile-menu a:hover {
+    color: var(--orange);
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .nav-hamburger { display: block; }
+  }
+
+  /* ─── WAITLIST FORM ─── */
+  .waitlist-form {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .waitlist-form input[type="email"] {
+    flex: 1;
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    padding: 1rem 1.5rem;
+    border: 1.5px solid rgba(26, 26, 24, 0.12);
+    border-right: none;
+    border-radius: 100px 0 0 100px;
+    background: #fff;
+    color: var(--charcoal);
+    outline: none;
+    min-width: 0;
+  }
+
+  .waitlist-form input[type="email"]:focus {
+    border-color: var(--orange);
+  }
+
+  .waitlist-form button {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 1rem 1.8rem;
+    border: none;
+    border-radius: 0 100px 100px 0;
+    background: var(--orange);
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.3s;
+  }
+
+  .waitlist-form button:hover {
+    background: var(--orange-dark);
+  }
+
+  .waitlist-success {
+    font-family: var(--sans);
+    font-size: 1.1rem;
+    color: var(--orange);
+    font-weight: 500;
+    margin-top: 1rem;
+    animation: fadeUp 0.5s forwards;
+  }
+
+  /* ─── FOOTER LINK ─── */
+  footer a {
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    color: var(--warm-gray);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  footer a:hover {
+    color: var(--charcoal);
+  }
+
+  /* ─── REDUCED MOTION ─── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    .reveal { opacity: 1; transform: none; }
+    .hero-logo, .hero h1, .hero-sub, .hero-cta, .scroll-hint { opacity: 1; transform: none; }
+  }
+</style>
+
+<noscript><style>
+  .reveal, .hero-logo, .hero h1, .hero-sub, .hero-cta, .scroll-hint { opacity: 1 !important; transform: none !important; }
+  .typing-cursor { display: none; }
+</style></noscript>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- NAVBAR -->
+<nav id="nav" aria-label="Main navigation">
+  <div class="nav-logo">
+    <a href="/"><img src="fitra-logo.png" alt="fitra" width="57" height="28"></a>
+  </div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#download" class="nav-cta">Download</a>
+  </div>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#how">How it works</a>
+  <a href="#features">Features</a>
+  <a href="#download">Download</a>
+</div>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-logo">
+      <img src="fitra-logo.png" alt="fitra" width="143" height="70">
+    </div>
+    <h1>Describe it.<br><em>We'll program it.</em></h1>
+    <p class="hero-sub">AI workout planning that speaks your language.</p>
+    <a href="#download" class="hero-cta">Download fitra</a>
+  </div>
+  <div class="scroll-hint"><span></span></div>
+</section>
+
+<!-- DEMO / HOW IT WORKS -->
+<section class="demo" id="how">
+  <div class="demo-label reveal">How it works</div>
+  <div class="prompt-flow reveal">
+    <div class="prompt-bubble">
+      <div class="prompt-text" id="typed-prompt">
+        <noscript>"push day, go lighter this week, add some core work"</noscript>
+      </div>
+      <span class="typing-cursor" id="cursor"></span>
+    </div>
+    <div class="flow-dots">
+      <span></span>
+      <span></span>
+    </div>
+    <div class="result-card">
+      <div class="result-header">Push Day — Light</div>
+      <div class="exercise-row">
+        <span class="exercise-name">Incline DB Press</span>
+        <span class="exercise-detail">3 × 10 · 60s rest</span>
+      </div>
+      <div class="exercise-row">
+        <span class="exercise-name">Cable Lateral Raise</span>
+        <span class="exercise-detail">3 × 15 · 45s rest</span>
+      </div>
+      <div class="exercise-row">
+        <span class="exercise-name">Overhead Tricep Ext.</span>
+        <span class="exercise-detail">3 × 12 · 45s rest</span>
+      </div>
+      <div class="exercise-row">
+        <span class="exercise-name">Ab Wheel Rollout</span>
+        <span class="exercise-detail">3 × 8 · 60s rest</span>
+      </div>
+      <div class="exercise-row">
+        <span class="exercise-name">Hanging Knee Raise</span>
+        <span class="exercise-detail">3 × 12 · 45s rest</span>
+      </div>
+      <div class="result-footer">
+        <span>5 exercises</span>
+        <span>~38 min</span>
+        <span>Est. 12,400 lbs volume</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-heading reveal">
+    <h2>Your words become<br><em>your workout.</em></h2>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon"></div>
+      <h3>Track volume</h3>
+      <p>Every set, every rep, every pound — logged automatically. Watch your total volume climb week over week.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"></div>
+      <h3>Hit new PRs</h3>
+      <p>fitra remembers your bests and nudges you past them. Personal records, surfaced and celebrated.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"></div>
+      <h3>Build streaks</h3>
+      <p>Consistency compounds. Track your training streaks and build the habit that builds everything else.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy reveal">
+  <blockquote>Strength training,<br><em>reimagined.</em></blockquote>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="bottom-cta" id="download">
+  <h2 class="reveal">Ditch the<br><em>workout spreadsheet.</em></h2>
+  <p class="reveal">Just describe what you want to train.</p>
+  <form class="waitlist-form reveal" onsubmit="return false;" id="waitlist-form">
+    <input type="email" placeholder="you@email.com" required>
+    <button type="submit">Sign up for updates</button>
+  </form>
+  <p class="waitlist-success" id="waitlist-success" hidden>Thanks! We'll keep you posted.</p>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <img src="fitra-logo.png" alt="fitra" width="45" height="22">
+  <small>&copy; 2026 fitra. All rights reserved.</small>
+  <div style="display:flex;gap:1.5rem">
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms &amp; Conditions</a>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile menu
+  const hamburger = document.querySelector('.nav-hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  function toggleMenu() {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('active', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+    hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    document.body.classList.toggle('menu-open', isOpen);
+  }
+
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('active');
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.setAttribute('aria-label', 'Open menu');
+    document.body.classList.remove('menu-open');
+  }
+
+  hamburger.addEventListener('click', toggleMenu);
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMenu();
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Waitlist form
+  const waitlistForm = document.getElementById('waitlist-form');
+  const waitlistSuccess = document.getElementById('waitlist-success');
+  waitlistForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    waitlistForm.hidden = true;
+    waitlistSuccess.hidden = false;
+  });
+
+  // Typing effect for prompt
+  const prompts = [
+    "push day, go lighter this week, add some core work",
+    "heavy pull day, throw in some rear delt work",
+    "upper body hypertrophy, cable machine focus",
+    "leg day, prioritize glutes, no barbell squats"
+  ];
+  let promptIdx = 0;
+  const typedEl = document.getElementById('typed-prompt');
+  const cursorEl = document.getElementById('cursor');
+
+  function typePrompt(text, cb) {
+    let i = 0;
+    typedEl.textContent = '\u201C';
+    const interval = setInterval(() => {
+      typedEl.textContent = '\u201C' + text.slice(0, i + 1);
+      i++;
+      if (i >= text.length) {
+        clearInterval(interval);
+        typedEl.textContent += '\u201D';
+        setTimeout(cb, 2500);
+      }
+    }, 45);
+  }
+
+  function erasePrompt(cb) {
+    const text = typedEl.textContent;
+    let i = text.length;
+    const interval = setInterval(() => {
+      typedEl.textContent = text.slice(0, i - 1);
+      i--;
+      if (i <= 1) {
+        clearInterval(interval);
+        typedEl.textContent = '';
+        setTimeout(cb, 400);
+      }
+    }, 20);
+  }
+
+  function runTypingLoop() {
+    typePrompt(prompts[promptIdx], () => {
+      erasePrompt(() => {
+        promptIdx = (promptIdx + 1) % prompts.length;
+        runTypingLoop();
+      });
+    });
+  }
+
+  // Start typing after a brief delay
+  setTimeout(runTypingLoop, 1500);
+</script>
+</body>
+</html>
