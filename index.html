@@ -916,11 +916,6 @@
 <section class="bottom-cta" id="download">
   <h2 class="reveal">Ditch the<br><em>workout spreadsheet.</em></h2>
   <p class="reveal">Just describe what you want to train.</p>
-  <form class="waitlist-form reveal" onsubmit="return false;" id="waitlist-form">
-    <input type="email" placeholder="you@email.com" required>
-    <button type="submit">Sign up for updates</button>
-  </form>
-  <p class="waitlist-success" id="waitlist-success" hidden>Thanks! We'll keep you posted.</p>
 </section>
 
 </main>
@@ -981,15 +976,6 @@
     });
   }, { threshold: 0.15 });
   reveals.forEach(el => observer.observe(el));
-
-  // Waitlist form
-  const waitlistForm = document.getElementById('waitlist-form');
-  const waitlistSuccess = document.getElementById('waitlist-success');
-  waitlistForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    waitlistForm.hidden = true;
-    waitlistSuccess.hidden = false;
-  });
 
   // Typing effect for prompt
   const prompts = [
