@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>fitra — Describe it. We'll program it.</title>
 <meta name="description" content="fitra is AI-powered workout planning that speaks your language. Describe your ideal session and get a structured program in seconds.">
 <meta property="og:title" content="fitra — Describe it. We'll program it.">
@@ -574,7 +574,7 @@
 
   /* ─── RESPONSIVE ─── */
   @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
+    nav { padding: calc(1rem + env(safe-area-inset-top)) 1.5rem 1rem; }
     .nav-links { display: none; }
     .hero { padding: 7rem 1.5rem 4rem; }
     .hero-logo img { height: 50px; }
