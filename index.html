@@ -785,6 +785,85 @@
     color: var(--charcoal);
   }
 
+  /* ─── LAUNCH MODAL ─── */
+  .launch-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(26, 26, 24, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+
+  .launch-modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .launch-modal {
+    background: var(--cream);
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(26, 26, 24, 0.15);
+    transform: translateY(16px) scale(0.97);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .launch-modal-overlay.open .launch-modal {
+    transform: translateY(0) scale(1);
+  }
+
+  .launch-modal h3 {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: 1.6rem;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+
+  .launch-modal h3 em {
+    font-style: italic;
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  .launch-modal p {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    color: var(--warm-gray);
+    line-height: 1.6;
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  .launch-modal-close {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--orange);
+    border: 1.5px solid var(--orange);
+    background: none;
+    padding: 0.75rem 2rem;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .launch-modal-close:hover {
+    background: var(--orange);
+    color: #fff;
+  }
+
   /* ─── REDUCED MOTION ─── */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -812,7 +891,7 @@
   <div class="nav-links">
     <a href="#how">How it works</a>
     <a href="#features">Features</a>
-    <a href="#download" class="nav-cta">Download</a>
+    <a href="#" class="nav-cta download-trigger">Download</a>
   </div>
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span>
@@ -823,7 +902,7 @@
 <div class="mobile-menu" id="mobile-menu">
   <a href="#how">How it works</a>
   <a href="#features">Features</a>
-  <a href="#download">Download</a>
+  <a href="#" class="download-trigger">Download</a>
 </div>
 
 <main id="main">
@@ -836,7 +915,7 @@
     </div>
     <h1>Describe it.<br><em>We'll program it.</em></h1>
     <p class="hero-sub">AI workout planning that speaks your language.</p>
-    <a href="#download" class="hero-cta">Download fitra</a>
+    <a href="#" class="hero-cta download-trigger">Download fitra</a>
   </div>
   <div class="scroll-hint"><span></span></div>
 </section>
@@ -932,6 +1011,15 @@
     <a href="/terms">Terms &amp; Conditions</a>
   </div>
 </footer>
+
+<!-- LAUNCH MODAL -->
+<div class="launch-modal-overlay" id="launch-modal" aria-hidden="true" role="dialog" aria-labelledby="launch-modal-title">
+  <div class="launch-modal">
+    <h3 id="launch-modal-title">Launching<br><em>any day now.</em></h3>
+    <p>fitra is currently awaiting App Store approval. We'll be live in the next few days — stay tuned.</p>
+    <button class="launch-modal-close" id="launch-modal-close">Got it</button>
+  </div>
+</div>
 
 <script>
   // Navbar scroll effect
@@ -1030,6 +1118,38 @@
 
   // Start typing after a brief delay
   setTimeout(runTypingLoop, 1500);
+
+  // Launch modal
+  const launchModal = document.getElementById('launch-modal');
+  const launchModalClose = document.getElementById('launch-modal-close');
+
+  function openLaunchModal(e) {
+    e.preventDefault();
+    launchModal.classList.add('open');
+    launchModal.setAttribute('aria-hidden', 'false');
+    launchModalClose.focus();
+    // Close mobile menu if open
+    if (mobileMenu.classList.contains('open')) closeMenu();
+  }
+
+  function closeLaunchModal() {
+    launchModal.classList.remove('open');
+    launchModal.setAttribute('aria-hidden', 'true');
+  }
+
+  document.querySelectorAll('.download-trigger').forEach(btn => {
+    btn.addEventListener('click', openLaunchModal);
+  });
+
+  launchModalClose.addEventListener('click', closeLaunchModal);
+
+  launchModal.addEventListener('click', (e) => {
+    if (e.target === launchModal) closeLaunchModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && launchModal.classList.contains('open')) closeLaunchModal();
+  });
 </script>
 </body>
 </html>
